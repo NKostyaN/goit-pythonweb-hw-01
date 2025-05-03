@@ -1,65 +1,63 @@
 from abc import abstractmethod, ABC
+import logging
+
+
+logging.basicConfig(
+    format="%(message)s", level=logging.INFO, handlers=[logging.StreamHandler()]
+)
 
 
 class Vehicle(ABC):
-    def __init__(self, make: str, model: str):
+    def __init__(self, make: str, model: str) -> None:
         self.make = make
         self.model = model
 
     @abstractmethod
-    def start_engine(self):
-        pass
-
-
-class VehicleFactory(ABC):
-    @abstractmethod
-    def create_car(self, make: str, model: str):
-        pass
-
-    @abstractmethod
-    def create_motorcycle(self, make: str, model: str):
+    def start_engine(self) -> None:
         pass
 
 
 class Car(Vehicle):
-    def __init__(self, make: str, model: str):
-        self.make = make
-        self.model = model
-
-    def start_engine(self):
-        print(f"{self.make} {self.model}: Двигун запущено")
+    def start_engine(self) -> None:
+        logging.info(f"{self.make} {self.model}: Двигун запущено")
 
 
 class Motorcycle(Vehicle):
-    def __init__(self, make: str, model: str):
-        self.make = make
-        self.model = model
+    def start_engine(self) -> None:
+        logging.info(f"{self.make} {self.model}: Мотор заведено")
 
-    def start_engine(self):
-        print(f"{self.make} {self.model}: Мотор заведено")
+
+class VehicleFactory(ABC):
+    @abstractmethod
+    def create_car(self, make: str, model: str) -> Car:
+        pass
+
+    @abstractmethod
+    def create_motorcycle(self, make: str, model: str) -> Motorcycle:
+        pass
 
 
 class USVehicleFactory(VehicleFactory):
-    def create_car(self, make: str, model: str):
+    def create_car(self, make: str, model: str) -> Car:
         car = Car(make, model)
-        print(f"Створено {car.make} {car.model} (US Spec)")
+        logging.info(f"Створено {car.make} {car.model} (US Spec)")
         return car
 
-    def create_motorcycle(self, make: str, model: str):
+    def create_motorcycle(self, make: str, model: str) -> Motorcycle:
         moto = Motorcycle(make, model)
-        print(f"Створено {moto.make} {moto.model} (US Spec)")
+        logging.info(f"Створено {moto.make} {moto.model} (US Spec)")
         return moto
 
 
 class EUVehicleFactory(VehicleFactory):
-    def create_car(self, make: str, model: str):
+    def create_car(self, make: str, model: str) -> Car:
         car = Car(make, model)
-        print(f"Створено {car.make} {car.model} (EU Spec)")
+        logging.info(f"Створено {car.make} {car.model} (EU Spec)")
         return car
 
-    def create_motorcycle(self, make: str, model: str):
+    def create_motorcycle(self, make: str, model: str) -> Motorcycle:
         moto = Motorcycle(make, model)
-        print(f"Створено {moto.make} {moto.model} (EU Spec)")
+        logging.info(f"Створено {moto.make} {moto.model} (EU Spec)")
         return moto
 
 
